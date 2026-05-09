@@ -25,7 +25,8 @@ include_directories("third_party/asutton/origin")
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 add_definitions(-D_WIN32_WINNT=0x0501)
-find_package(Boost COMPONENTS regex date_time system filesystem unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS regex date_time filesystem unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS system OPTIONAL)
 include_directories(${Boost_INCLUDE_DIR})
 
 macro(boosttest_add_test TESTNAME)
@@ -41,6 +42,16 @@ endmacro()
 # Google Test Library #
 #######################
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+#[[
 # Prevent GoogleTest from overriding our compiler/linker options
 # when building with Visual Studio
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -51,6 +62,7 @@ mark_as_advanced(
     gmock_build_tests gtest_build_samples gtest_build_tests
     gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
 )
+]]
 
 set_target_properties(gtest PROPERTIES FOLDER third_party)
 set_target_properties(gtest_main PROPERTIES FOLDER third_party)
