@@ -62,7 +62,7 @@ void calculate(TimerClass a) {
 }
 
 int main() {
-  TimerClass timer("out");
+  TimerClass timer("out年后");
   calculate(std::move(timer));
   return 0;
 }
